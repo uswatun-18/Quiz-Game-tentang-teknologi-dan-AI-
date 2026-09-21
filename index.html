@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Game Tantangan Teknologi & AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+            min-height: 100vh;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .option-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            background: rgba(99, 102, 241, 0.2);
+            border-color: #6366f1;
+        }
+        .glow {
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.4);
+        }
+    </style>
+</head>
+<body class="text-slate-100 flex items-center justify-center p-4 min-h-screen">
+
+    <div class="w-full max-w-2xl">
+        <!-- START SCREEN -->
+        <div id="start-screen" class="glass-card rounded-3xl p-8 text-center glow relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl"></div>
+            
+            <div class="inline-flex p-4 bg-indigo-500/10 rounded-2xl mb-6 text-indigo-400 border border-indigo-500/20">
+                <i class="fa-solid fa-robot text-5xl"></i>
+            </div>
+            
+            <h1 class="text-3xl md:text-4xl font-extrabold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400">
+                Tantangan Teknologi & AI
+            </h1>
+            <p class="text-slate-400 mb-8 text-sm md:text-base max-w-md mx-auto">
+                Uji pengetahuanmu seputar kecerdasan buatan, istilah teknologi, dan tren era digital lewat 15 soal seru!
+            </p>
+
+            <div class="grid grid-cols-3 gap-4 mb-8 text-center">
+                <div class="glass p-3 rounded-2xl">
+                    <p class="text-xs text-slate-400">Jumlah Soal</p>
+                    <p class="text-xl font-bold text-indigo-400">15</p>
+                </div>
+                <div class="glass p-3 rounded-2xl">
+                    <p class="text-xs text-slate-400">Format</p>
+                    <p class="text-xl font-bold text-purple-400">Pilihan Ganda</p>
+                </div>
+                <div class="glass p-3 rounded-2xl">
+                    <p class="text-xs text-slate-400">Tingkat</p>
+                    <p class="text-xl font-bold text-pink-400">Umum</p>
+                </div>
+            </div>
+
+            <button onclick="startQuiz()" class="w-full py-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:opacity-95 font-bold text-lg rounded-2xl shadow-lg transition duration-300 transform active:scale-95 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-play"></i> Mulai Quiz
+            </button>
+        </div>
+
+        <!-- QUIZ SCREEN -->
+        <div id="quiz-screen" class="hidden glass-card rounded-3xl p-6 md:p-8 relative">
+            <!-- Header Progress -->
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-indigo-400">Pertanyaan</span>
+                    <h2 class="text-lg font-bold" id="question-number">1 / 15</h2>
+                </div>
+                <div class="flex items-center gap-2 bg-indigo-500/10 px-4 py-2 rounded-xl border border-indigo-500/20">
+                    <i class="fa-solid fa-star text-amber-400"></i>
+                    <span class="font-bold text-indigo-300" id="current-score">Skor: 0</span>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-slate-800 rounded-full h-2.5 mb-6 overflow-hidden">
+                <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 to-pink-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <!-- Question Text -->
+            <h3 id="question-text" class="text-xl md:text-2xl font-semibold text-slate-100 mb-6 leading-relaxed">
+                Loading...
+            </h3>
+
+            <!-- Options Container -->
+            <div id="options-container" class="space-y-3 mb-6">
+                <!-- Buttons will be injected here -->
+            </div>
+
+            <!-- Next Button -->
+            <button id="next-btn" onclick="nextQuestion()" disabled class="w-full py-3.5 bg-slate-800 text-slate-500 font-semibold rounded-xl flex items-center justify-center gap-2 transition duration-200 cursor-not-allowed">
+                Selanjutnya <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div id="result-screen" class="hidden glass-card rounded-3xl p-8 text-center glow relative">
+            <div class="inline-flex p-4 bg-indigo-500/10 rounded-full mb-4 text-indigo-400 border border-indigo-500/20">
+                <i class="fa-solid fa-trophy text-5xl text-amber-400"></i>
+            </div>
+
+            <h2 class="text-3xl font-extrabold mb-2">Hasil Akhir</h2>
+            <p class="text-slate-400 mb-6" id="result-message">Luar biasa! Kamu menyelesaikan kuis ini.</p>
+
+            <div class="glass p-6 rounded-2xl mb-8 max-w-sm mx-auto border border-indigo-500/20">
+                <p class="text-sm text-slate-400 mb-1">Skor Kamu</p>
+                <div class="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-pink-400 mb-2" id="final-score">
+                    0
+                </div>
+                <p class="text-xs text-slate-400" id="correct-count">0 dari 15 jawaban benar</p>
+            </div>
+
+            <button onclick="restartQuiz()" class="w-full py-4 bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-95 font-bold text-lg rounded-2xl shadow-lg transition duration-300 transform active:scale-95 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-rotate-right"></i> Coba Lagi
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                q: "Apa kepanjangan dari AI?",
+                options: ["Automatic Internet", "Artificial Intelligence", "Advanced Information", "Automated Innovation"],
+                answer: 1
+            },
+            {
+                q: "Apa fungsi utama ChatGPT?",
+                options: ["Mengisi baterai", "Memproses dan menghasilkan teks", "Memperbaiki hardware", "Menambah RAM"],
+                answer: 1
+            },
+            {
+                q: "Teknologi yang memungkinkan komputer mengenali wajah disebut…",
+                options: ["Face Recognition", "Cloud Storage", "Blockchain", "VPN"],
+                answer: 0
+            },
+            {
+                q: "Apa yang dimaksud dengan Machine Learning?",
+                options: ["Komputer belajar dari data", "Manusia belajar menggunakan komputer", "Memperbaiki mesin secara manual", "Menghapus data otomatis"],
+                answer: 0
+            },
+            {
+                q: "Mana yang termasuk perangkat AI?",
+                options: ["Smart speaker", "Kalkulator biasa", "Penggaris", "Kabel USB"],
+                answer: 0
+            },
+            {
+                q: "Apa fungsi Cloud Computing?",
+                options: ["Menyimpan dan memproses data melalui internet", "Mendinginkan komputer", "Memperbesar layar", "Mengganti keyboard"],
+                answer: 0
+            },
+            {
+                q: "Apa itu Prompt dalam AI?",
+                options: ["Perintah atau instruksi yang diberikan kepada AI", "Virus komputer", "Jenis prosesor", "Sistem operasi"],
+                answer: 0
+            },
+            {
+                q: "Teknologi blockchain paling dikenal sebagai teknologi dasar dari…",
+                options: ["Bitcoin", "Wi-Fi", "Bluetooth", "GPS"],
+                answer: 0
+            },
+            {
+                q: "Apa fungsi utama GPU?",
+                options: ["Mengolah grafis dan komputasi paralel", "Menyimpan file", "Menghubungkan internet", "Menghasilkan suara"],
+                answer: 0
+            },
+            {
+                q: "Apa yang dimaksud dengan Deepfake?",
+                options: ["Konten sintetis yang dibuat atau dimanipulasi menggunakan AI", "File yang sangat besar", "Jaringan internet bawah laut", "Sistem keamanan bank"],
+                answer: 0
+            },
+            {
+                q: "AI yang dapat memahami dan menghasilkan bahasa manusia termasuk bidang…",
+                options: ["NLP", "GPS", "IoT", "HTML"],
+                answer: 0
+            },
+            {
+                q: "Apa kepanjangan IoT?",
+                options: ["Internet of Things", "Intelligence of Technology", "Internet of Tools", "Information Online Technology"],
+                answer: 0
+            },
+            {
+                q: "Contoh penggunaan AI dalam kehidupan sehari-hari adalah…",
+                options: ["Rekomendasi video", "Buku tulis", "Pensil", "Penggaris"],
+                answer: 0
+            },
+            {
+                q: "Apa yang dimaksud dengan Generative AI?",
+                options: ["AI yang dapat menghasilkan konten baru", "AI yang hanya menyimpan data", "AI untuk memperbaiki kabel", "AI yang mematikan komputer"],
+                answer: 0
+            },
+            {
+                q: "Tantangan utama penggunaan AI adalah…",
+                options: ["Privasi, keamanan, dan informasi yang tidak akurat", "Warna layar", "Ukuran keyboard", "Bentuk mouse"],
+                answer: 0
+            }
+        ];
+
+        let currentIdx = 0;
+        let score = 0;
+        let answered = false;
+
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const questionNumberEl = document.getElementById('question-number');
+        const questionTextEl = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const progressBar = document.getElementById('progress-bar');
+        const currentScoreEl = document.getElementById('current-score');
+        const nextBtn = document.getElementById('next-btn');
+
+        function startQuiz() {
+            startScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            currentIdx = 0;
+            score = 0;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            const q = questions[currentIdx];
+            
+            // Progress Bar & Counter Update
+            questionNumberEl.innerText = `${currentIdx + 1} / ${questions.length}`;
+            const progressPercent = ((currentIdx) / questions.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            currentScoreEl.innerText = `Skor: ${score}`;
+
+            // Reset Next Button
+            nextBtn.disabled = true;
+            nextBtn.className = "w-full py-3.5 bg-slate-800 text-slate-500 font-semibold rounded-xl flex items-center justify-center gap-2 transition duration-200 cursor-not-allowed";
+
+            // Set Question Text
+            questionTextEl.innerText = q.q;
+
+            // Clear and Render Options
+            optionsContainer.innerHTML = '';
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = "option-btn w-full text-left p-4 rounded-xl border border-slate-700 bg-slate-800/50 hover:bg-slate-800 flex items-center justify-between font-medium text-slate-200";
+                
+                const optionLabel = String.fromCharCode(65 + index); // A, B, C, D
+                
+                btn.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-lg bg-slate-700/50 flex items-center justify-center text-xs font-bold text-slate-300 border border-slate-600">${optionLabel}</span>
+                        <span>${opt}</span>
+                    </div>
+                    <i class="fa-regular fa-circle icon-placeholder text-slate-500"></i>
+                `;
+
+                btn.onclick = () => selectOption(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex, selectedBtn) {
+            if (answered) return;
+            answered = true;
+
+            const q = questions[currentIdx];
+            const allButtons = optionsContainer.children;
+
+            if (selectedIndex === q.answer) {
+                score += 10;
+                selectedBtn.className = "w-full text-left p-4 rounded-xl border border-emerald-500/50 bg-emerald-500/10 text-emerald-300 flex items-center justify-between font-medium";
+                selectedBtn.querySelector('.icon-placeholder').className = "fa-solid fa-circle-check text-emerald-400 text-lg";
+            } else {
+                selectedBtn.className = "w-full text-left p-4 rounded-xl border border-rose-500/50 bg-rose-500/10 text-rose-300 flex items-center justify-between font-medium";
+                selectedBtn.querySelector('.icon-placeholder').className = "fa-solid fa-circle-xmark text-rose-400 text-lg";
+
+                // Highlight Correct Answer
+                const correctBtn = allButtons[q.answer];
+                correctBtn.className = "w-full text-left p-4 rounded-xl border border-emerald-500/50 bg-emerald-500/10 text-emerald-300 flex items-center justify-between font-medium";
+                correctBtn.querySelector('.icon-placeholder').className = "fa-solid fa-circle-check text-emerald-400 text-lg";
+            }
+
+            // Disable all buttons
+            Array.from(allButtons).forEach(btn => btn.disabled = true);
+
+            // Enable Next Button
+            nextBtn.disabled = false;
+            nextBtn.className = "w-full py-3.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-95 text-white font-semibold rounded-xl flex items-center justify-center gap-2 transition duration-200 cursor-pointer shadow-lg";
+            
+            currentScoreEl.innerText = `Skor: ${score}`;
+        }
+
+        function nextQuestion() {
+            if (currentIdx < questions.length - 1) {
+                currentIdx++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            const totalScore = score;
+            const correctAnswers = score / 10;
+            
+            document.getElementById('final-score').innerText = totalScore;
+            document.getElementById('correct-count').innerText = `${correctAnswers} dari ${questions.length} jawaban benar`;
+
+            const resultMessage = document.getElementById('result-message');
+            if (correctAnswers === 15) {
+                resultMessage.innerText = "Sempurna! Kamu adalah Master AI dan Teknologi!";
+            } else if (correctAnswers >= 10) {
+                resultMessage.innerText = "Hebat! Pengetahuan teknologi kamu sangat luas!";
+            } else if (correctAnswers >= 5) {
+                resultMessage.innerText = "Cukup baik! Tingkatkan lagi wawasan teknologimu.";
+            } else {
+                resultMessage.innerText = "Jangan menyerah! Coba lagi untuk memperdalam pengetahuan AI.";
+            }
+        }
+
+        function restartQuiz() {
+            resultScreen.classList.add('hidden');
+            startQuiz();
+        }
+    </script>
+</body>
+</html>
+```eof
+
+### Deskripsi Aplikasi Quiz Web:
+- **Tampilan Futuristis & Responsif**: Menggunakan tema gelap (Dark Glassmorphism) dengan Tailwind CSS yang nyaman dilihat dan kompatibel dengan layar ponsel maupun komputer.
+- **Interaktif**: Menampilkan opsi jawaban bergaya kuis modern dengan indikator warna hijau untuk jawaban benar dan merah jika salah.
+- **Fitur Skor & Progress Bar**: Progres kuis terpantau secara langsung di bagian atas layar beserta perhitungan skor otomatis.
