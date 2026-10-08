@@ -1,349 +1,1175 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Game Tantangan Teknologi & AI</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
-            min-height: 100vh;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Game - MTs DDI Kelurahan Baru</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #0f172a, #1e3a8a, #2563eb);
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 850px;
+    }
+
+    .card {
+        background: rgba(255,255,255,0.97);
+        color: #172033;
+        border-radius: 24px;
+        padding: 30px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    .welcome {
+        text-align: center;
+    }
+
+    .logo {
+        width: 90px;
+        height: 90px;
+        margin: 0 auto 20px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2563eb, #06b6d4);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 42px;
+        box-shadow: 0 10px 25px rgba(37,99,235,0.4);
+    }
+
+    h1 {
+        color: #1e3a8a;
+        margin-bottom: 10px;
+        font-size: 30px;
+    }
+
+    h2 {
+        margin-bottom: 15px;
+        color: #1e3a8a;
+    }
+
+    .subtitle {
+        color: #64748b;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+
+    .school {
+        font-weight: bold;
+        color: #2563eb;
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    button {
+        border: none;
+        border-radius: 12px;
+        padding: 14px 24px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    button:hover {
+        transform: translateY(-2px);
+        opacity: 0.92;
+    }
+
+    .btn-primary {
+        background: #2563eb;
+        color: white;
+    }
+
+    .btn-success {
+        background: #16a34a;
+        color: white;
+    }
+
+    .btn-danger {
+        background: #dc2626;
+        color: white;
+    }
+
+    .btn-secondary {
+        background: #64748b;
+        color: white;
+    }
+
+    .btn-warning {
+        background: #f59e0b;
+        color: white;
+    }
+
+    input {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #cbd5e1;
+        border-radius: 12px;
+        font-size: 16px;
+        margin: 15px 0;
+        outline: none;
+    }
+
+    input:focus {
+        border-color: #2563eb;
+    }
+
+    /* QUIZ */
+
+    .quiz-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        gap: 10px;
+    }
+
+    .player {
+        font-weight: bold;
+        color: #2563eb;
+    }
+
+    .question-number {
+        background: #dbeafe;
+        color: #1d4ed8;
+        padding: 8px 14px;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    .progress-container {
+        height: 10px;
+        background: #e2e8f0;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 25px;
+    }
+
+    .progress {
+        height: 100%;
+        background: linear-gradient(90deg, #2563eb, #06b6d4);
+        width: 0%;
+        transition: width 0.3s;
+    }
+
+    .question {
+        font-size: 22px;
+        font-weight: bold;
+        line-height: 1.5;
+        margin-bottom: 25px;
+    }
+
+    .options {
+        display: grid;
+        gap: 13px;
+    }
+
+    .option {
+        width: 100%;
+        text-align: left;
+        background: #f8fafc;
+        color: #172033;
+        border: 2px solid #e2e8f0;
+        padding: 16px;
+        border-radius: 13px;
+        font-weight: normal;
+    }
+
+    .option:hover {
+        background: #eff6ff;
+        border-color: #60a5fa;
+    }
+
+    .option.selected {
+        background: #dbeafe;
+        border-color: #2563eb;
+        color: #1d4ed8;
+        font-weight: bold;
+    }
+
+    .navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 25px;
+        gap: 10px;
+    }
+
+    .navigation button {
+        min-width: 130px;
+    }
+
+    /* RESULT */
+
+    .result {
+        text-align: center;
+    }
+
+    .score-circle {
+        width: 170px;
+        height: 170px;
+        margin: 20px auto;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2563eb, #06b6d4);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        box-shadow: 0 15px 35px rgba(37,99,235,0.35);
+    }
+
+    .score-circle .score {
+        font-size: 45px;
+        font-weight: bold;
+    }
+
+    .score-circle small {
+        font-size: 15px;
+    }
+
+    .result-info {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin: 25px 0;
+    }
+
+    .result-box {
+        padding: 18px;
+        border-radius: 15px;
+        background: #f1f5f9;
+    }
+
+    .result-box strong {
+        display: block;
+        font-size: 26px;
+        margin-bottom: 5px;
+    }
+
+    .correct {
+        color: #16a34a;
+    }
+
+    .wrong {
+        color: #dc2626;
+    }
+
+    .total {
+        color: #2563eb;
+    }
+
+    /* ADMIN */
+
+    .admin-question {
+        background: #f8fafc;
+        padding: 18px;
+        border-radius: 15px;
+        margin-bottom: 15px;
+        border-left: 5px solid #2563eb;
+    }
+
+    .admin-question h3 {
+        margin-bottom: 10px;
+        color: #1e3a8a;
+    }
+
+    .admin-question ul {
+        padding-left: 25px;
+        line-height: 1.8;
+    }
+
+    .answer-key {
+        margin-top: 10px;
+        background: #dcfce7;
+        color: #166534;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-weight: bold;
+        display: inline-block;
+    }
+
+    .admin-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    @media(max-width:600px) {
+        .card {
+            padding: 20px;
         }
-        .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+
+        h1 {
+            font-size: 25px;
         }
-        .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+
+        .question {
+            font-size: 19px;
         }
-        .option-btn {
-            transition: all 0.2s ease-in-out;
+
+        .result-info {
+            grid-template-columns: 1fr;
         }
-        .option-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            background: rgba(99, 102, 241, 0.2);
-            border-color: #6366f1;
+
+        .navigation {
+            flex-direction: column;
         }
-        .glow {
-            box-shadow: 0 0 25px rgba(99, 102, 241, 0.4);
+
+        .navigation button {
+            width: 100%;
         }
-    </style>
+    }
+</style>
 </head>
-<body class="text-slate-100 flex items-center justify-center p-4 min-h-screen">
 
-    <div class="w-full max-w-2xl">
-        <!-- START SCREEN -->
-        <div id="start-screen" class="glass-card rounded-3xl p-8 text-center glow relative overflow-hidden">
-            <div class="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl"></div>
-            
-            <div class="inline-flex p-4 bg-indigo-500/10 rounded-2xl mb-6 text-indigo-400 border border-indigo-500/20">
-                <i class="fa-solid fa-robot text-5xl"></i>
-            </div>
-            
-            <h1 class="text-3xl md:text-4xl font-extrabold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400">
-                Tantangan Teknologi & AI
-            </h1>
-            <p class="text-slate-400 mb-8 text-sm md:text-base max-w-md mx-auto">
-                Uji pengetahuanmu seputar kecerdasan buatan, istilah teknologi, dan tren era digital lewat 15 soal seru!
-            </p>
+<body>
 
-            <div class="grid grid-cols-3 gap-4 mb-8 text-center">
-                <div class="glass p-3 rounded-2xl">
-                    <p class="text-xs text-slate-400">Jumlah Soal</p>
-                    <p class="text-xl font-bold text-indigo-400">15</p>
-                </div>
-                <div class="glass p-3 rounded-2xl">
-                    <p class="text-xs text-slate-400">Format</p>
-                    <p class="text-xl font-bold text-purple-400">Pilihan Ganda</p>
-                </div>
-                <div class="glass p-3 rounded-2xl">
-                    <p class="text-xs text-slate-400">Tingkat</p>
-                    <p class="text-xl font-bold text-pink-400">Umum</p>
-                </div>
-            </div>
+<div class="container">
 
-            <button onclick="startQuiz()" class="w-full py-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:opacity-95 font-bold text-lg rounded-2xl shadow-lg transition duration-300 transform active:scale-95 flex items-center justify-center gap-2">
-                <i class="fa-solid fa-play"></i> Mulai Quiz
-            </button>
+    <!-- HALAMAN AWAL -->
+    <div id="home" class="card welcome">
+
+        <div class="logo">🤖</div>
+
+        <div class="school">
+            MTs DDI Kelurahan Baru
         </div>
 
-        <!-- QUIZ SCREEN -->
-        <div id="quiz-screen" class="hidden glass-card rounded-3xl p-6 md:p-8 relative">
-            <!-- Header Progress -->
-            <div class="flex items-center justify-between mb-6">
-                <div>
-                    <span class="text-xs font-semibold uppercase tracking-wider text-indigo-400">Pertanyaan</span>
-                    <h2 class="text-lg font-bold" id="question-number">1 / 15</h2>
-                </div>
-                <div class="flex items-center gap-2 bg-indigo-500/10 px-4 py-2 rounded-xl border border-indigo-500/20">
-                    <i class="fa-solid fa-star text-amber-400"></i>
-                    <span class="font-bold text-indigo-300" id="current-score">Skor: 0</span>
-                </div>
-            </div>
+        <h1>Selamat Datang!</h1>
 
-            <!-- Progress Bar -->
-            <div class="w-full bg-slate-800 rounded-full h-2.5 mb-6 overflow-hidden">
-                <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 to-pink-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
-            </div>
+        <p class="subtitle">
+            Quiz Game Teknologi dan Artificial Intelligence (AI).
+            Uji pengetahuanmu dan dapatkan nilai terbaik!
+        </p>
 
-            <!-- Question Text -->
-            <h3 id="question-text" class="text-xl md:text-2xl font-semibold text-slate-100 mb-6 leading-relaxed">
-                Loading...
-            </h3>
-
-            <!-- Options Container -->
-            <div id="options-container" class="space-y-3 mb-6">
-                <!-- Buttons will be injected here -->
-            </div>
-
-            <!-- Next Button -->
-            <button id="next-btn" onclick="nextQuestion()" disabled class="w-full py-3.5 bg-slate-800 text-slate-500 font-semibold rounded-xl flex items-center justify-center gap-2 transition duration-200 cursor-not-allowed">
-                Selanjutnya <i class="fa-solid fa-arrow-right"></i>
+        <div class="button-group">
+            <button class="btn-primary" onclick="showParticipant()">
+                👨‍🎓 Peserta
             </button>
-        </div>
 
-        <!-- RESULT SCREEN -->
-        <div id="result-screen" class="hidden glass-card rounded-3xl p-8 text-center glow relative">
-            <div class="inline-flex p-4 bg-indigo-500/10 rounded-full mb-4 text-indigo-400 border border-indigo-500/20">
-                <i class="fa-solid fa-trophy text-5xl text-amber-400"></i>
-            </div>
-
-            <h2 class="text-3xl font-extrabold mb-2">Hasil Akhir</h2>
-            <p class="text-slate-400 mb-6" id="result-message">Luar biasa! Kamu menyelesaikan kuis ini.</p>
-
-            <div class="glass p-6 rounded-2xl mb-8 max-w-sm mx-auto border border-indigo-500/20">
-                <p class="text-sm text-slate-400 mb-1">Skor Kamu</p>
-                <div class="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-pink-400 mb-2" id="final-score">
-                    0
-                </div>
-                <p class="text-xs text-slate-400" id="correct-count">0 dari 15 jawaban benar</p>
-            </div>
-
-            <button onclick="restartQuiz()" class="w-full py-4 bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-95 font-bold text-lg rounded-2xl shadow-lg transition duration-300 transform active:scale-95 flex items-center justify-center gap-2">
-                <i class="fa-solid fa-rotate-right"></i> Coba Lagi
+            <button class="btn-success" onclick="showAdmin()">
+                🔐 Admin
             </button>
         </div>
     </div>
 
-    <script>
-        const questions = [
-            {
-                q: "Apa kepanjangan dari AI?",
-                options: ["Automatic Internet", "Artificial Intelligence", "Advanced Information", "Automated Innovation"],
-                answer: 1
-            },
-            {
-                q: "Apa fungsi utama ChatGPT?",
-                options: ["Mengisi baterai", "Memproses dan menghasilkan teks", "Memperbaiki hardware", "Menambah RAM"],
-                answer: 1
-            },
-            {
-                q: "Teknologi yang memungkinkan komputer mengenali wajah disebut…",
-                options: ["Face Recognition", "Cloud Storage", "Blockchain", "VPN"],
-                answer: 0
-            },
-            {
-                q: "Apa yang dimaksud dengan Machine Learning?",
-                options: ["Komputer belajar dari data", "Manusia belajar menggunakan komputer", "Memperbaiki mesin secara manual", "Menghapus data otomatis"],
-                answer: 0
-            },
-            {
-                q: "Mana yang termasuk perangkat AI?",
-                options: ["Smart speaker", "Kalkulator biasa", "Penggaris", "Kabel USB"],
-                answer: 0
-            },
-            {
-                q: "Apa fungsi Cloud Computing?",
-                options: ["Menyimpan dan memproses data melalui internet", "Mendinginkan komputer", "Memperbesar layar", "Mengganti keyboard"],
-                answer: 0
-            },
-            {
-                q: "Apa itu Prompt dalam AI?",
-                options: ["Perintah atau instruksi yang diberikan kepada AI", "Virus komputer", "Jenis prosesor", "Sistem operasi"],
-                answer: 0
-            },
-            {
-                q: "Teknologi blockchain paling dikenal sebagai teknologi dasar dari…",
-                options: ["Bitcoin", "Wi-Fi", "Bluetooth", "GPS"],
-                answer: 0
-            },
-            {
-                q: "Apa fungsi utama GPU?",
-                options: ["Mengolah grafis dan komputasi paralel", "Menyimpan file", "Menghubungkan internet", "Menghasilkan suara"],
-                answer: 0
-            },
-            {
-                q: "Apa yang dimaksud dengan Deepfake?",
-                options: ["Konten sintetis yang dibuat atau dimanipulasi menggunakan AI", "File yang sangat besar", "Jaringan internet bawah laut", "Sistem keamanan bank"],
-                answer: 0
-            },
-            {
-                q: "AI yang dapat memahami dan menghasilkan bahasa manusia termasuk bidang…",
-                options: ["NLP", "GPS", "IoT", "HTML"],
-                answer: 0
-            },
-            {
-                q: "Apa kepanjangan IoT?",
-                options: ["Internet of Things", "Intelligence of Technology", "Internet of Tools", "Information Online Technology"],
-                answer: 0
-            },
-            {
-                q: "Contoh penggunaan AI dalam kehidupan sehari-hari adalah…",
-                options: ["Rekomendasi video", "Buku tulis", "Pensil", "Penggaris"],
-                answer: 0
-            },
-            {
-                q: "Apa yang dimaksud dengan Generative AI?",
-                options: ["AI yang dapat menghasilkan konten baru", "AI yang hanya menyimpan data", "AI untuk memperbaiki kabel", "AI yang mematikan komputer"],
-                answer: 0
-            },
-            {
-                q: "Tantangan utama penggunaan AI adalah…",
-                options: ["Privasi, keamanan, dan informasi yang tidak akurat", "Warna layar", "Ukuran keyboard", "Bentuk mouse"],
-                answer: 0
-            }
-        ];
 
-        let currentIdx = 0;
-        let score = 0;
-        let answered = false;
+    <!-- HALAMAN PESERTA -->
+    <div id="participant" class="card hidden">
 
-        const startScreen = document.getElementById('start-screen');
-        const quizScreen = document.getElementById('quiz-screen');
-        const resultScreen = document.getElementById('result-screen');
-        const questionNumberEl = document.getElementById('question-number');
-        const questionTextEl = document.getElementById('question-text');
-        const optionsContainer = document.getElementById('options-container');
-        const progressBar = document.getElementById('progress-bar');
-        const currentScoreEl = document.getElementById('current-score');
-        const nextBtn = document.getElementById('next-btn');
+        <h2>👨‍🎓 Data Peserta</h2>
 
-        function startQuiz() {
-            startScreen.classList.add('hidden');
-            quizScreen.classList.remove('hidden');
-            currentIdx = 0;
-            score = 0;
-            loadQuestion();
+        <p class="subtitle">
+            Silakan masukkan nama sebelum memulai quiz.
+        </p>
+
+        <input
+            type="text"
+            id="participantName"
+            placeholder="Masukkan nama peserta..."
+            autocomplete="off"
+        >
+
+        <div class="button-group">
+            <button class="btn-success" onclick="startQuiz()">
+                🚀 Mulai Quiz
+            </button>
+
+            <button class="btn-secondary" onclick="goHome()">
+                ← Kembali
+            </button>
+        </div>
+    </div>
+
+
+    <!-- HALAMAN QUIZ -->
+    <div id="quiz" class="card hidden">
+
+        <div class="quiz-header">
+            <div class="player">
+                👤 <span id="playerName"></span>
+            </div>
+
+            <div class="question-number">
+                Soal <span id="currentNumber">1</span>/15
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <div id="progress" class="progress"></div>
+        </div>
+
+        <div id="questionText" class="question"></div>
+
+        <div id="options" class="options"></div>
+
+        <div class="navigation">
+
+            <button
+                id="prevButton"
+                class="btn-secondary"
+                onclick="previousQuestion()">
+                ← Sebelumnya
+            </button>
+
+            <button
+                id="nextButton"
+                class="btn-primary"
+                onclick="nextQuestion()">
+                Berikutnya →
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- HASIL -->
+    <div id="result" class="card result hidden">
+
+        <h2>🎉 Quiz Selesai!</h2>
+
+        <p id="resultMessage" class="subtitle"></p>
+
+        <div class="score-circle">
+            <div id="finalScore" class="score">0</div>
+            <small>Nilai</small>
+        </div>
+
+        <div class="result-info">
+
+            <div class="result-box">
+                <strong id="correctCount" class="correct">0</strong>
+                Benar
+            </div>
+
+            <div class="result-box">
+                <strong id="wrongCount" class="wrong">0</strong>
+                Salah
+            </div>
+
+            <div class="result-box">
+                <strong class="total">15</strong>
+                Jumlah Soal
+            </div>
+
+        </div>
+
+        <div class="button-group">
+
+            <button class="btn-primary" onclick="restartQuiz()">
+                🔄 Main Lagi
+            </button>
+
+            <button class="btn-secondary" onclick="goHome()">
+                🏠 Menu Utama
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ADMIN -->
+    <div id="admin" class="card hidden">
+
+        <div class="admin-top">
+            <h2>🔐 Panel Admin</h2>
+
+            <button
+                class="btn-secondary"
+                onclick="goHome()">
+                ← Kembali
+            </button>
+        </div>
+
+        <p class="subtitle">
+            Daftar soal dan kunci jawaban. Halaman ini hanya untuk admin.
+        </p>
+
+        <div id="adminQuestions"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ===============================
+   DATA SOAL
+================================ */
+
+const questions = [
+
+    {
+        question: "Apa kepanjangan dari AI?",
+        options: [
+            "Automatic Internet",
+            "Artificial Intelligence",
+            "Advanced Information",
+            "Artificial Interne"
+        ],
+        answer: 1
+    },
+
+    {
+        question: "Teknologi AI yang dapat memahami dan menghasilkan bahasa manusia disebut...",
+        options: [
+            "Computer Vision",
+            "Natural Language Processing",
+            "Cloud Computing",
+            "Internet of Things"
+        ],
+        answer: 1
+    },
+
+    {
+        question: "Contoh penerapan AI dalam kehidupan sehari-hari adalah...",
+        options: [
+            "Kalkulator biasa",
+            "Lampu pijar",
+            "Asisten virtual seperti Siri atau Google Assistant",
+            "Buku cetak"
+        ],
+        answer: 2
+    },
+
+    {
+        question: "Apa fungsi utama machine learning?",
+        options: [
+            "Membuat komputer menjadi lebih besar",
+            "Membuat komputer belajar dari data",
+            "Menghapus semua data",
+            "Mematikan jaringan internet"
+        ],
+        answer: 1
+    },
+
+    {
+        question: "Teknologi yang memungkinkan komputer mengenali wajah manusia disebut...",
+        options: [
+            "Face Recognition",
+            "Cloud Storage",
+            "Web Hosting",
+            "Data Compression"
+        ],
+        answer: 0
+    },
+
+    {
+        question: "ChatGPT merupakan contoh teknologi yang menggunakan...",
+        options: [
+            "Kecerdasan buatan",
+            "Mesin diesel",
+            "Teknologi analog",
+            "Kompas digital"
+        ],
+        answer: 0
+    },
+
+    {
+        question: "Apa yang dimaksud dengan Internet of Things (IoT)?",
+        options: [
+            "Jaringan komputer tanpa internet",
+            "Kumpulan perangkat yang dapat terhubung dan bertukar data melalui internet",
+            "Program untuk mengedit foto",
+            "Sistem operasi komputer"
+        ],
+        answer: 1
+    },
+
+    {
+        question: "Salah satu manfaat AI dalam bidang pendidikan adalah...",
+        options: [
+            "Membantu memberikan pembelajaran yang lebih personal",
+            "Menghilangkan kebutuhan untuk belajar",
+            "Menghapus semua buku",
+            "Membuat internet tidak diperlukan"
+        ],
+        answer: 0
+    },
+
+    {
+        question: "Data yang digunakan untuk melatih model AI disebut...",
+        options: [
+            "Training data",
+            "Password data",
+            "Display data",
+            "Screen data"
+        ],
+        answer: 0
+    },
+
+    {
+        question: "Teknologi yang digunakan untuk menyimpan data melalui internet disebut...",
+        options: [
+            "Cloud computing",
+            "Bluetooth",
+            "Keyboard",
+            "Scanner"
+        ],
+        answer: 0
+    },
+
+    {
+        question: "Apa salah satu risiko penggunaan AI yang perlu diperhatikan?",
+        options: [
+            "Selalu menghasilkan jawaban yang benar",
+            "Tidak membutuhkan data",
+            "Dapat menghasilkan informasi yang keliru atau bias",
+            "Tidak dapat digunakan dalam kehidupan sehari-hari"
+        ],
+        answer: 2
+    },
+
+    {
+        question: "Contoh penggunaan AI dalam bidang kesehatan adalah...",
+        options: [
+            "Membantu menganalisis gambar medis",
+            "Mengganti semua rumah sakit",
+            "Membuat obat tanpa penelitian",
+            "Menghilangkan dokter sepenuhnya"
+        ],
+        answer: 0
+    },
+
+    {
+        question: "Apa fungsi chatbot?",
+        options: [
+            "Menyimpan listrik",
+            "Berinteraksi dengan pengguna melalui percakapan",
+            "Mencetak dokumen",
+            "Menghubungkan kabel jaringan"
+        ],
+        answer: 1
+    },
+
+    {
+        question: "Teknologi AI yang digunakan untuk membuat atau mengenali gambar termasuk bidang...",
+        options: [
+            "Computer Vision",
+            "Word Processing",
+            "Spreadsheet",
+            "File Management"
+        ],
+        answer: 0
+    },
+
+    {
+        question: "Sikap yang tepat saat menggunakan AI adalah...",
+        options: [
+            "Mempercayai semua hasil AI tanpa memeriksa",
+            "Menggunakan AI secara bertanggung jawab dan memverifikasi informasi penting",
+            "Menggunakan AI untuk menipu orang lain",
+            "Membagikan semua data pribadi kepada AI"
+        ],
+        answer: 1
+    }
+
+];
+
+
+/* ===============================
+   VARIABEL QUIZ
+================================ */
+
+let quizQuestions = [];
+let currentQuestion = 0;
+let userAnswers = [];
+let participant = "";
+
+
+/* ===============================
+   FUNGSI HALAMAN
+================================ */
+
+function hideAll() {
+
+    document.getElementById("home").classList.add("hidden");
+    document.getElementById("participant").classList.add("hidden");
+    document.getElementById("quiz").classList.add("hidden");
+    document.getElementById("result").classList.add("hidden");
+    document.getElementById("admin").classList.add("hidden");
+
+}
+
+
+function goHome() {
+
+    hideAll();
+
+    document.getElementById("home").classList.remove("hidden");
+
+}
+
+
+function showParticipant() {
+
+    hideAll();
+
+    document.getElementById("participant").classList.remove("hidden");
+
+    document.getElementById("participantName").focus();
+
+}
+
+
+function showAdmin() {
+
+    hideAll();
+
+    document.getElementById("admin").classList.remove("hidden");
+
+    loadAdminQuestions();
+
+}
+
+
+/* ===============================
+   ACAK DATA
+================================ */
+
+function shuffle(array) {
+
+    let newArray = [...array];
+
+    for (let i = newArray.length - 1; i > 0; i--) {
+
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [newArray[i], newArray[j]] =
+        [newArray[j], newArray[i]];
+
+    }
+
+    return newArray;
+}
+
+
+/*
+    Membuat soal baru.
+
+    Catatan:
+    Kunci jawaban ikut dipindahkan
+    ketika pilihan jawaban diacak.
+*/
+
+function createQuizQuestions() {
+
+    return shuffle(questions).map(q => {
+
+        const answerText = q.options[q.answer];
+
+        const shuffledOptions = shuffle(q.options);
+
+        return {
+            question: q.question,
+            options: shuffledOptions,
+            answer: shuffledOptions.indexOf(answerText)
+        };
+
+    });
+
+}
+
+
+/* ===============================
+   MULAI QUIZ
+================================ */
+
+function startQuiz() {
+
+    const nameInput =
+        document.getElementById("participantName");
+
+    const name =
+        nameInput.value.trim();
+
+    if (name === "") {
+
+        alert("Silakan masukkan nama peserta terlebih dahulu.");
+
+        nameInput.focus();
+
+        return;
+    }
+
+    participant = name;
+
+    quizQuestions = createQuizQuestions();
+
+    currentQuestion = 0;
+
+    userAnswers =
+        new Array(quizQuestions.length).fill(null);
+
+    document.getElementById("playerName").textContent =
+        participant;
+
+    hideAll();
+
+    document.getElementById("quiz").classList.remove("hidden");
+
+    showQuestion();
+
+}
+
+
+/* ===============================
+   TAMPILKAN SOAL
+================================ */
+
+function showQuestion() {
+
+    const q =
+        quizQuestions[currentQuestion];
+
+    document.getElementById("currentNumber").textContent =
+        currentQuestion + 1;
+
+    document.getElementById("questionText").textContent =
+        q.question;
+
+    const optionsContainer =
+        document.getElementById("options");
+
+    optionsContainer.innerHTML = "";
+
+    const letters = ["A", "B", "C", "D"];
+
+    q.options.forEach((option, index) => {
+
+        const button =
+            document.createElement("button");
+
+        button.className = "option";
+
+        button.innerHTML =
+            "<strong>" +
+            letters[index] +
+            ".</strong> " +
+            option;
+
+        if (userAnswers[currentQuestion] === index) {
+
+            button.classList.add("selected");
+
         }
 
-        function loadQuestion() {
-            answered = false;
-            const q = questions[currentIdx];
-            
-            // Progress Bar & Counter Update
-            questionNumberEl.innerText = `${currentIdx + 1} / ${questions.length}`;
-            const progressPercent = ((currentIdx) / questions.length) * 100;
-            progressBar.style.width = `${progressPercent}%`;
-            currentScoreEl.innerText = `Skor: ${score}`;
+        button.onclick = function() {
 
-            // Reset Next Button
-            nextBtn.disabled = true;
-            nextBtn.className = "w-full py-3.5 bg-slate-800 text-slate-500 font-semibold rounded-xl flex items-center justify-center gap-2 transition duration-200 cursor-not-allowed";
+            selectAnswer(index);
 
-            // Set Question Text
-            questionTextEl.innerText = q.q;
+        };
 
-            // Clear and Render Options
-            optionsContainer.innerHTML = '';
-            q.options.forEach((opt, index) => {
-                const btn = document.createElement('button');
-                btn.className = "option-btn w-full text-left p-4 rounded-xl border border-slate-700 bg-slate-800/50 hover:bg-slate-800 flex items-center justify-between font-medium text-slate-200";
-                
-                const optionLabel = String.fromCharCode(65 + index); // A, B, C, D
-                
-                btn.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <span class="w-8 h-8 rounded-lg bg-slate-700/50 flex items-center justify-center text-xs font-bold text-slate-300 border border-slate-600">${optionLabel}</span>
-                        <span>${opt}</span>
-                    </div>
-                    <i class="fa-regular fa-circle icon-placeholder text-slate-500"></i>
-                `;
+        optionsContainer.appendChild(button);
 
-                btn.onclick = () => selectOption(index, btn);
-                optionsContainer.appendChild(btn);
-            });
+    });
+
+
+    /* Progress */
+
+    const progress =
+        ((currentQuestion + 1) /
+        quizQuestions.length) * 100;
+
+    document.getElementById("progress").style.width =
+        progress + "%";
+
+
+    /* Tombol sebelumnya */
+
+    document.getElementById("prevButton").disabled =
+        currentQuestion === 0;
+
+
+    /* Tombol berikutnya */
+
+    const nextButton =
+        document.getElementById("nextButton");
+
+    if (currentQuestion === quizQuestions.length - 1) {
+
+        nextButton.textContent =
+            "🏁 Selesai";
+
+        nextButton.className =
+            "btn-success";
+
+    } else {
+
+        nextButton.textContent =
+            "Berikutnya →";
+
+        nextButton.className =
+            "btn-primary";
+
+    }
+
+}
+
+
+/* ===============================
+   PILIH JAWABAN
+================================ */
+
+function selectAnswer(index) {
+
+    userAnswers[currentQuestion] = index;
+
+    showQuestion();
+
+}
+
+
+/* ===============================
+   SOAL SEBELUMNYA
+================================ */
+
+function previousQuestion() {
+
+    if (currentQuestion > 0) {
+
+        currentQuestion--;
+
+        showQuestion();
+
+    }
+
+}
+
+
+/* ===============================
+   SOAL BERIKUTNYA
+================================ */
+
+function nextQuestion() {
+
+    /*
+       Peserta harus memilih jawaban
+       sebelum lanjut.
+    */
+
+    if (userAnswers[currentQuestion] === null) {
+
+        alert("Silakan pilih salah satu jawaban terlebih dahulu.");
+
+        return;
+    }
+
+
+    if (currentQuestion <
+        quizQuestions.length - 1) {
+
+        currentQuestion++;
+
+        showQuestion();
+
+    } else {
+
+        finishQuiz();
+
+    }
+
+}
+
+
+/* ===============================
+   SELESAI QUIZ
+================================ */
+
+function finishQuiz() {
+
+    let correct = 0;
+
+    for (let i = 0;
+        i < quizQuestions.length;
+        i++) {
+
+        if (
+            userAnswers[i] ===
+            quizQuestions[i].answer
+        ) {
+
+            correct++;
+
         }
 
-        function selectOption(selectedIndex, selectedBtn) {
-            if (answered) return;
-            answered = true;
+    }
 
-            const q = questions[currentIdx];
-            const allButtons = optionsContainer.children;
+    const total =
+        quizQuestions.length;
 
-            if (selectedIndex === q.answer) {
-                score += 10;
-                selectedBtn.className = "w-full text-left p-4 rounded-xl border border-emerald-500/50 bg-emerald-500/10 text-emerald-300 flex items-center justify-between font-medium";
-                selectedBtn.querySelector('.icon-placeholder').className = "fa-solid fa-circle-check text-emerald-400 text-lg";
-            } else {
-                selectedBtn.className = "w-full text-left p-4 rounded-xl border border-rose-500/50 bg-rose-500/10 text-rose-300 flex items-center justify-between font-medium";
-                selectedBtn.querySelector('.icon-placeholder').className = "fa-solid fa-circle-xmark text-rose-400 text-lg";
+    const wrong =
+        total - correct;
 
-                // Highlight Correct Answer
-                const correctBtn = allButtons[q.answer];
-                correctBtn.className = "w-full text-left p-4 rounded-xl border border-emerald-500/50 bg-emerald-500/10 text-emerald-300 flex items-center justify-between font-medium";
-                correctBtn.querySelector('.icon-placeholder').className = "fa-solid fa-circle-check text-emerald-400 text-lg";
-            }
+    const score =
+        Math.round((correct / total) * 100);
 
-            // Disable all buttons
-            Array.from(allButtons).forEach(btn => btn.disabled = true);
 
-            // Enable Next Button
-            nextBtn.disabled = false;
-            nextBtn.className = "w-full py-3.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-95 text-white font-semibold rounded-xl flex items-center justify-center gap-2 transition duration-200 cursor-pointer shadow-lg";
-            
-            currentScoreEl.innerText = `Skor: ${score}`;
-        }
+    document.getElementById("finalScore").textContent =
+        score;
 
-        function nextQuestion() {
-            if (currentIdx < questions.length - 1) {
-                currentIdx++;
-                loadQuestion();
-            } else {
-                showResults();
-            }
-        }
+    document.getElementById("correctCount").textContent =
+        correct;
 
-        function showResults() {
-            quizScreen.classList.add('hidden');
-            resultScreen.classList.remove('hidden');
+    document.getElementById("wrongCount").textContent =
+        wrong;
 
-            const totalScore = score;
-            const correctAnswers = score / 10;
-            
-            document.getElementById('final-score').innerText = totalScore;
-            document.getElementById('correct-count').innerText = `${correctAnswers} dari ${questions.length} jawaban benar`;
 
-            const resultMessage = document.getElementById('result-message');
-            if (correctAnswers === 15) {
-                resultMessage.innerText = "Sempurna! Kamu adalah Master AI dan Teknologi!";
-            } else if (correctAnswers >= 10) {
-                resultMessage.innerText = "Hebat! Pengetahuan teknologi kamu sangat luas!";
-            } else if (correctAnswers >= 5) {
-                resultMessage.innerText = "Cukup baik! Tingkatkan lagi wawasan teknologimu.";
-            } else {
-                resultMessage.innerText = "Jangan menyerah! Coba lagi untuk memperdalam pengetahuan AI.";
-            }
-        }
+    let message = "";
 
-        function restartQuiz() {
-            resultScreen.classList.add('hidden');
-            startQuiz();
-        }
-    </script>
+    if (score >= 90) {
+
+        message =
+            "🏆 Luar biasa! Pengetahuan kamu sangat baik.";
+
+    } else if (score >= 75) {
+
+        message =
+            "👏 Bagus sekali! Terus tingkatkan lagi.";
+
+    } else if (score >= 60) {
+
+        message =
+            "👍 Cukup baik. Tetap semangat belajar.";
+
+    } else {
+
+        message =
+            "💪 Jangan menyerah. Belajar lagi dan coba kembali.";
+
+    }
+
+
+    document.getElementById("resultMessage").innerHTML =
+        "<strong>" +
+        participant +
+        "</strong><br>" +
+        message;
+
+
+    hideAll();
+
+    document.getElementById("result").classList.remove("hidden");
+
+}
+
+
+/* ===============================
+   MAIN LAGI
+================================ */
+
+function restartQuiz() {
+
+    quizQuestions = createQuizQuestions();
+
+    currentQuestion = 0;
+
+    userAnswers =
+        new Array(quizQuestions.length).fill(null);
+
+    hideAll();
+
+    document.getElementById("quiz").classList.remove("hidden");
+
+    showQuestion();
+
+}
+
+
+/* ===============================
+   ADMIN
+================================ */
+
+function loadAdminQuestions() {
+
+    const container =
+        document.getElementById("adminQuestions");
+
+    container.innerHTML = "";
+
+    const letters = ["A", "B", "C", "D"];
+
+    questions.forEach((q, index) => {
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "admin-question";
+
+        let optionsHTML = "";
+
+        q.options.forEach((option, i) => {
+
+            optionsHTML +=
+                "<li>" +
+                letters[i] +
+                ". " +
+                option +
+                "</li>";
+
+        });
+
+        div.innerHTML =
+
+            "<h3>Soal " +
+            (index + 1) +
+            "</h3>" +
+
+            "<p><strong>" +
+            q.question +
+            "</strong></p>" +
+
+            "<ul>" +
+            optionsHTML +
+            "</ul>" +
+
+            "<div class='answer-key'>" +
+            "Kunci Jawaban: " +
+            letters[q.answer] +
+            ". " +
+            q.options[q.answer] +
+            "</div>";
+
+        container.appendChild(div);
+
+    });
+
+}
+
+</script>
+
 </body>
-</html>
-```eof
-
-### Deskripsi Aplikasi Quiz Web:
-- **Tampilan Futuristis & Responsif**: Menggunakan tema gelap (Dark Glassmorphism) dengan Tailwind CSS yang nyaman dilihat dan kompatibel dengan layar ponsel maupun komputer.
-- **Interaktif**: Menampilkan opsi jawaban bergaya kuis modern dengan indikator warna hijau untuk jawaban benar dan merah jika salah.
-- **Fitur Skor & Progress Bar**: Progres kuis terpantau secara langsung di bagian atas layar beserta perhitungan skor otomatis.
+</html>                       
